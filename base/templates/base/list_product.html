@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Formulaire de recherche et filtres -->
+<!-- Page des produits avec recherche et filtres -->
+<section class="container mx-auto mt-8 px-4">
+
+    <!-- Titre de la page -->
+    <h2 class="text-3xl font-bold mb-4">Explorer les produits de tout  les super marches de kinshasa a partir de votre telephone ou pc et acheter aussi directement</h2>
+
+    <!-- Formulaire de recherche pour mobile -->
+    <section id="search-slide" class="sm:hidden fixed top-0 left-0 w-full bg-gray-900 bg-opacity-75 z-50 hidden">
+        <div class="flex justify-between items-center p-4">
+            <h2 class="text-white font-semibold">Filtres de recherche</h2>
+            <button id="close-slide" class="text-white">X</button>
+        </div>
+        <form method="GET" action="#produits" class="p-4 bg-white">
+            <!-- Champ de recherche par nom -->
+            <div class="flex flex-col mb-4">
+                <label for="nom" class="text-lg font-semibold">Nom du produit</label>
+                <input type="text" name="nom" value="{{ product_name }}" placeholder="Rechercher par nom" class="px-4 py-2 border border-gray-300 rounded-lg">
+            </div>
+
+            <!-- Sélecteur de catégorie -->
+            <div class="flex flex-col mb-4">
+                <label for="categorie" class="text-lg font-semibold">Catégorie</label>
+                <select name="categorie" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">Toutes</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Champs de prix minimum et maximum -->
+            <div class="flex flex-col mb-4">
+                <label for="prix_min" class="text-lg font-semibold">Prix min</label>
+                <input type="number" name="prix_min" value="{{ prix_min }}" placeholder="Prix minimum" class="px-4 py-2 border border-gray-300 rounded-lg">
+            </div>
+
+            <div class="flex flex-col mb-4">
+                <label for="prix_max" class="text-lg font-semibold">Prix max</label>
+                <input type="number" name="prix_max" value="{{ prix_max }}" placeholder="Prix maximum" class="px-4 py-2 border border-gray-300 rounded-lg">
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="flex justify-center items-end">
+                <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    Rechercher
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Bouton pour ouvrir les filtres (mobile) -->
+    <div class="sm:hidden text-center mt-4">
+        <button id="open-slide" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+            Ouvrir les filtres
+        </button>
+    </div>
+
+    <!-- Formulaire pour desktop (visible uniquement sur grand écran) -->
+    <section id="search-desktop" class="hidden sm:block py-8 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <form method="GET" action="#produits" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Champ de recherche par nom -->
+                <div class="flex flex-col">
+                    <label for="nom" class="text-lg font-semibold">Nom du produit</label>
+                    <input type="text" name="nom" value="{{ product_name }}" placeholder="Rechercher par nom" class="px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+
+                <!-- Sélecteur de catégorie -->
+                <div class="flex flex-col">
+                    <label for="categorie" class="text-lg font-semibold">Catégorie</label>
+                    <select name="categorie" class="px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">Toutes</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Champs de prix minimum et maximum -->
+                <div class="flex flex-col">
+                    <label for="prix_min" class="text-lg font-semibold">Prix min</label>
+                    <input type="number" name="prix_min" value="{{ prix_min }}" placeholder="Prix minimum" class="px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="prix_max" class="text-lg font-semibold">Prix max</label>
+                    <input type="number" name="prix_max" value="{{ prix_max }}" placeholder="Prix maximum" class="px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+
+                <!-- Bouton de soumission -->
+                <div class="flex justify-center items-end sm:col-span-2 lg:col-span-4 mt-6">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
+                        Rechercher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Affichage des produits -->
+    <section id="produits" class="py-16 bg-gray-100">
+        <div class="flex flex-wrap gap-6 justify-center">
+            {% for product in products %}
+            <div class="flex-shrink-0 border-2 border-secondary bg-slate-100 text-black rounded-xl mb-6 cursor-pointer hover:scale-95 hover:bg-slate-200 transition duration-200 ease-linear w-64 h-full flex flex-col">
+                <div>
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="rounded-t-xl w-full h-40 object-cover" />
+                </div>
+                <div class="flex flex-col justify-between flex-grow p-4">
+                    <!-- Formulaire d'ajout au panier -->
+                    <form id="add-to-cart-form-{{ product.id }}" action="{% url 'add_to_cart_ajax' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-full text-lg hover:bg-blue-600 transition duration-300">
+                            Ajouter au panier
+                        </button>
+                    </form>
+
+                    <!-- Nom du produit et prix -->
+                    <div class="flex flex-col items-center my-4">
+                        <h1 class="font-semibold text-xl text-primary pt-2 text-center">{{ product.name }}</h1>
+                        <h2 class="font-medium text-lg text-center">{{ product.price }} CDF{{ product.store.currency }}</h2>
+                    </div>
+
+                    <!-- Affichage des étoiles de la note moyenne -->
+                    <div class="flex items-center justify-center my-2">
+                        <p class="text-yellow-500">
+                            {% for i in range_10 %}
+                                {% if i <= product.average_rating %}
+                                    &#9733;  <!-- Étoile remplie -->
+                                {% else %}
+                                    &#9734;  <!-- Étoile vide -->
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p class="text-gray-500 text-sm">Note moyenne: {{ product.average_rating|default:"0" }}/10</p>
+                    </div>
+
+                    <!-- Bouton "Voir les détails" -->
+                    <a href="{% url 'product_detail' product.id %}" class="px-6 py-2 bg-blue-500 text-white rounded-full text-lg hover:bg-blue-600 transition duration-300">
+                        Voir les détails
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p>Aucun produit trouvé pour cette recherche.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if products.has_other_pages %}
+        <div class="mt-8">
+            <nav aria-label="Pagination des produits" class="flex justify-center">
+                <ul class="flex space-x-4">
+                    {% if products.has_previous %}
+                    <li>
+                        <a href="?page=1#produits" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">&laquo; Première</a>
+                    </li>
+                    <li>
+                        <a href="?page={{ products.previous_page_number }}#produits" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Précédente</a>
+                    </li>
+                    {% endif %}
+                    {% for page in products.paginator.page_range %}
+                        {% if page == products.number %}
+                        <li><span class="px-4 py-2 bg-blue-600 text-white rounded-lg">{{ page }}</span></li>
+                        {% else %}
+                        <li><a href="?page={{ page }}#produits" class="px-4 py-2 bg-gray-200 text-black rounded-lg hover:bg-blue-600">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if products.has_next %}
+                    <li>
+                        <a href="?page={{ products.next_page_number }}#produits" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Suivante</a>
+                    </li>
+                    <li>
+                        <a href="?page={{ products.paginator.num_pages }}#produits" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Dernière &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </section>
+</section>
+
+<!-- JavaScript pour contrôler l'ouverture/fermeture du slide -->
+<script>
+    const openSlideButton = document.getElementById('open-slide');
+    const searchSlide = document.getElementById('search-slide');
+    const closeSlideButton = document.getElementById('close-slide');
+
+    openSlideButton.addEventListener('click', () => {
+        searchSlide.classList.remove('hidden');
+    });
+
+    closeSlideButton.addEventListener('click', () => {
+        searchSlide.classList.add('hidden');
+    });
+</script>
+
+
+{% endblock content %}

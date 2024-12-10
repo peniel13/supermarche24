@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-3xl font-bold text-center mb-8">Détails des Ventes du {{ order_date }}</h2>
+
+    <div class="mb-4">
+        <p>Total des Ventes: {{ total_orders }}</p>
+        <p>Total Montant de ventes: {{ total_amount|floatformat:2 }} CDF</p>
+    </div>
+
+    {% if orders %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-white shadow-lg rounded-lg">
+            <thead class="bg-blue-600 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left">Commande #</th>
+                    <th class="px-6 py-3 text-left">Statut</th>
+                    <th class="px-6 py-3 text-left">Date</th>
+                    <th class="px-6 py-3 text-left">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="border-t">
+                    <td class="px-6 py-4">
+                        <!-- Lien pour voir les détails de la commande via l'ID -->
+                        <a href="{% url 'order_detail_store' order.id %}" class="text-blue-600 hover:text-blue-800">
+                            {{ order.id }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4">{{ order.status }}</td>
+                    <td class="px-6 py-4">{{ order.created_at }}</td>
+                    <td class="px-6 py-4">
+                        <!-- Lien pour voir les détails de la commande via le montant -->
+                        <a href="{% url 'order_detail_store' order.id %}" class="text-blue-600 hover:text-blue-800">
+                            {{ order.total_amount|floatformat:2 }} CDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% comment %} pagination  {% endcomment %}
+    {% if orders.has_other_pages %}
+    <div class="mt-8">
+        <nav aria-label="Pagination des commandes" class="flex justify-center">
+            <ul class="flex space-x-4">
+                {% if orders.has_previous %}
+                    <li>
+                        <a href="?page=1#commandes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">&laquo; Première</a>
+                    </li>
+                    <li>
+                        <a href="?page={{ orders.previous_page_number }}#commandes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Précédente</a>
+                    </li>
+                {% endif %}
+                
+                {% for page in orders.paginator.page_range %}
+                    <li>
+                        {% if page == orders.number %}
+                            <a href="?page={{ page }}#commandes" class="px-4 py-2 bg-blue-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ page }}</a>
+                        {% else %}
+                            <a href="?page={{ page }}#commandes" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">{{ page }}</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% if orders.has_next %}
+                    <li>
+                        <a href="?page={{ orders.next_page_number }}#commandes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Suivante</a>
+                    </li>
+                    <li>
+                        <a href="?page={{ orders.paginator.num_pages }}#commandes" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Dernière &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+        <p class="text-center text-lg text-gray-600">Aucune commande pour cette date.</p>
+    {% endif %}
+{% endblock %}
