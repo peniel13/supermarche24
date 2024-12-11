@@ -5,10 +5,11 @@
 <!-- Header section avec l'image de fond -->
 <section class="relative bg-cover bg-center h-96" style="background-image: url('{{ store.thumbnail.url }}');">
     <div class="absolute inset-0 bg-gray-800 opacity-50"></div>
-    <div class="container mx-auto h-full flex items-center justify-center relative z-10">
+    <div class="container mx-auto h-full flex items-center justify-center relative z-10 px-4">
         <div class="text-center text-white">
-            <h1 class="text-5xl font-bold">{{ store.name }}</h1>
-            <p class="text-2xl mt-2">{{ store.commune }}</p>
+            <!-- Utilisation de classes responsive pour adapter la taille du texte -->
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">{{ store.name }}</h1>
+            <p class="text-lg sm:text-2xl mt-2">{{ store.commune }}</p>
 
             <!-- Affichage des autres informations directement dans le header -->
             <div class="mt-4 text-lg">
@@ -19,10 +20,11 @@
     </div>
 </section>
 
+
 <!-- Boutons pour créer une catégorie et un produit -->
 {% if store.owner == user %}
 <div class="container mx-auto mt-8 text-center">
-    <div class="flex justify-center gap-4">
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
         <!-- Lien vers la création d'une catégorie -->
         <a href="{% url 'create_category' store.slug %}" class="inline-block px-6 py-3 text-white bg-green-600 hover:bg-green-800 rounded-md transition duration-300">
             Créer une catégorie
@@ -32,12 +34,14 @@
         <a href="{% url 'create_product' store.slug %}" class="inline-block px-6 py-3 text-white bg-blue-600 hover:bg-blue-800 rounded-md transition duration-300">
             Créer un produit
         </a>
-         <!-- Lien vers la création d'un produit -->
-         <a href="{% url 'manage_product_store' store.slug %}" class="inline-block px-6 py-3 text-white bg-blue-600 hover:bg-blue-800 rounded-md transition duration-300">
+
+        <!-- Lien vers la gestion des produits -->
+        <a href="{% url 'manage_product_store' store.slug %}" class="inline-block px-6 py-3 text-white bg-yellow-500 hover:bg-yellow-600 rounded-md transition duration-300">
             Manager vos produits
         </a>
     </div>
 </div>
+
 {% endif %}
 <!-- Formulaire de recherche et filtres -->
 <section class="container mx-auto mt-8 px-4">

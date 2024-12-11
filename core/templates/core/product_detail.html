@@ -80,12 +80,22 @@
   </div>
   
   <!-- Modal pour afficher l'image en grand -->
-  <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
-      <span class="absolute top-4 right-4 text-white text-3xl cursor-pointer" onclick="closeGallery()">×</span>
-      <img id="modalImage" class="max-w-full max-h-screen p-4">
-      <button class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white px-4 py-2 bg-blue-500 rounded" onclick="nextImage()">Suivant</button>
-      <button class="absolute bottom-4 left-1/4 transform -translate-x-1/4 text-white px-4 py-2 bg-blue-500 rounded" onclick="previousImage()">Précédent</button>
-  </div>
+<!-- Modal pour afficher l'image en grand -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <span class="absolute top-4 right-4 text-white text-3xl cursor-pointer" onclick="closeGallery()">×</span>
+    <img id="modalImage" class="max-w-full max-h-screen p-4">
+    
+    <!-- Conteneur des boutons Suivant et Précédent -->
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row justify-between w-full max-w-md px-6 space-y-4 sm:space-y-0 sm:space-x-4">
+        <!-- Bouton Suivant -->
+        <button class="text-white px-6 py-3 bg-blue-500 rounded w-full sm:w-auto" onclick="nextImage()">Suivant</button>
+        
+        <!-- Bouton Précédent -->
+        <button class="text-white px-6 py-3 bg-blue-500 rounded w-full sm:w-auto" onclick="previousImage()">Précédent</button>
+    </div>
+</div>
+
+
   <!-- Section des témoignages -->
   <section id="temoignages" class="py-16 bg-gray-50">
     <div class="container mx-auto">

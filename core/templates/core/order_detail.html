@@ -17,31 +17,52 @@
         <!-- Liste des articles de la commande -->
         <div class="bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold mb-4">Articles de la commande</h2>
-            <table class="min-w-full table-auto">
-                <thead class="bg-blue-600 text-white">
-                    <tr>
-                        <th class="px-4 py-2">Produit</th>
-                        <th class="px-4 py-2">Quantité</th>
-                        <th class="px-4 py-2">Prix Unitaire</th>
-                        <th class="px-4 py-2">Prix Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in order_items %}
-                    <tr class="border-t">
-                        <td class="px-4 py-2">{{ item.product.name }}</td>
-                        <td class="px-4 py-2">{{ item.quantity }}</td>
-                        <td class="px-4 py-2">{{ item.price_at_time_of_order }} CDF</td>
-                        <td class="px-4 py-2">{{ item.get_total_price }} CDF</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="px-4 py-2 text-center text-gray-600">Aucun article dans cette commande.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-blue-600 text-white">
+                        <tr class="hidden sm:table-row">
+                            <th class="px-4 py-2">Produit</th>
+                            <th class="px-4 py-2">Quantité</th>
+                            <th class="px-4 py-2">Prix Unitaire</th>
+                            <th class="px-4 py-2">Prix Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                        <tr class="border-t sm:hidden">
+                            <td class="px-4 py-2 font-semibold">Produit :</td>
+                            <td class="px-4 py-2">{{ item.product.name }}</td>
+                        </tr>
+                        <tr class="border-t sm:hidden">
+                            <td class="px-4 py-2 font-semibold">Quantité :</td>
+                            <td class="px-4 py-2">{{ item.quantity }}</td>
+                        </tr>
+                        <tr class="border-t sm:hidden">
+                            <td class="px-4 py-2 font-semibold">Prix Unitaire :</td>
+                            <td class="px-4 py-2">{{ item.price_at_time_of_order }} CDF</td>
+                        </tr>
+                        <tr class="border-t sm:hidden">
+                            <td class="px-4 py-2 font-semibold">Prix Total :</td>
+                            <td class="px-4 py-2">{{ item.get_total_price }} CDF</td>
+                        </tr>
+        
+                        <!-- Affichage classique pour les grands écrans -->
+                        <tr class="hidden sm:table-row">
+                            <td class="px-4 py-2">{{ item.product.name }}</td>
+                            <td class="px-4 py-2">{{ item.quantity }}</td>
+                            <td class="px-4 py-2">{{ item.price_at_time_of_order }} CDF</td>
+                            <td class="px-4 py-2">{{ item.get_total_price }} CDF</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-4 py-2 text-center text-gray-600">Aucun article dans cette commande.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
+        
         
         <!-- Lien de retour -->
         <div class="mt-8 text-center">

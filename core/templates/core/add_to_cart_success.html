@@ -17,12 +17,18 @@
         <p><strong>Total du panier :</strong> {{ total_price }} CDF</p>
     </div>
 
-    <div class="flex justify-between mt-8">
-        <a href="{% url 'store_detail' product.store.slug %}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700">Continuer avec les achats/store</a>
-        <a href="{% url 'cart_detail' %}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">Voir mon panier</a>
-        <a href="{% url 'list_product' %}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">Continuer avec les achats/Produit</a>
-        
+    <div class="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+        <a href="{% url 'store_detail' product.store.slug %}" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700">
+            Continuer avec les achats/ espace store
+        </a>
+        <a href="{% url 'cart_detail' %}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            Voir mon panier
+        </a>
+        <a href="{% url 'list_product' %}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            Continuer avec les achats/espace Produit
+        </a>
     </div>
+    
 </div>
 <script>
     // Fonction pour mettre à jour le nombre d'articles dans le panier dans la navbar

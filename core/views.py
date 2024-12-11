@@ -759,8 +759,8 @@ def checkout(request):
             for item in cart.items.all()
         ],
         mode='payment',
-        success_url=request.build_absolute_uri('http://127.0.0.1:8000/user/payment_success/'),
-        cancel_url=request.build_absolute_uri('http://127.0.0.1:8000/user/payment_cancel/'),
+        success_url=request.build_absolute_uri('https://supermarche24.onrender.com/user/payment_success/'),
+        cancel_url=request.build_absolute_uri('https://supermarche24.onrender.com/user/payment_cancel/'),
     )
 
     # Rediriger l'utilisateur vers la page de paiement Stripe
